@@ -1,11 +1,6 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
 
-base_url = "https://kr.indeed.com/jobs?q="
-browser = webdriver.Chrome()
-browser.get(f"{base_url}python")
-soup = BeautifulSoup(browser.page_source, "html.parser")
-
 
 def job_searching(results: list, jobs: list) -> list:
     for job in jobs:
@@ -15,9 +10,9 @@ def job_searching(results: list, jobs: list) -> list:
             company_name = job.find("span", class_="companyName")
             company_location = job.find("div", class_="companyLocation")
             job_data = {
-                'company': company_name.string,
-                'region': company_location.string,
-                'position': title_name.string
+                'company': company_name.string.replace(",", " "),
+                'region': company_location.string.replace(",", " "),
+                'position': title_name.string.replace(",", " ")
             }
             results.append(job_data)
     return results
@@ -40,4 +35,3 @@ def extractor_jobs(keyword):
         results = job_searching(results, jobs)
         next_page = soup.find("a", attrs={'data-testid': 'pagination-page-next'})
     return results
-
