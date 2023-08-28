@@ -6,19 +6,19 @@ def job_searching(results: list, jobs: list) -> list:
     for job in jobs:
         title = job.find("h2", class_="jobTitle")
         if title:
-            title_name = title.find("span")
-            company_name = job.find("span", class_="companyName")
-            company_location = job.find("div", class_="companyLocation")
+            title = title.find("span")
+            company = job.find("span", class_="companyName")
+            location = job.find("div", class_="companyLocation")
             job_data = {
-                'company': company_name.string.replace(",", " "),
-                'region': company_location.string.replace(",", " "),
-                'position': title_name.string.replace(",", " ")
+                'company': company.text.replace(",", " "),
+                'location': location.text.replace(",", " "),
+                'position': title.text.replace(",", " ")
             }
             results.append(job_data)
     return results
 
 
-def extractor_jobs(keyword):
+def indeed_extractor(keyword):
     results = []
     base_url = "https://kr.indeed.com/jobs?q="
     browser = webdriver.Chrome()
